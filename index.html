@@ -56,7 +56,8 @@
 </head>
 <body>
     <strong id="headerTitle" style="margin-left: 10vw">AssemblyScript Online</strong>
-    <button id="runButton" onclick="globalThis.runClick()" style="margin-left: 30vw">Run</button>
+    <button id="runButton" onclick="globalThis.print_WasmText()" style="margin-left: 30vw">Wasm Text</button>
+    <button onclick="globalThis.download_WasmBinary()" style="margin-left: 30vw">Wasm Binary</button>
     <div id="mainDiv">
         <textarea id="code"></textarea>
         <textarea id="output" disabled wrap="off"></textarea>
