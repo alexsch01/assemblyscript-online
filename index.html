@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AssemblyScript Online</title>
+    <style>
+        .ace_mobile-menu { display: none !important }
+    </style>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "assemblyscript": "./assemblyscript/assemblyscript.js",
+                "binaryen": "./assemblyscript/binaryen.js",
+                "long": "./assemblyscript/long.js"
+            }
+        }
+    </script>
+
+    <script src="ace.js"></script>
+    <script src="makeWasm.js" type="module"></script>
+    
+    <script>
+        window.onload = function() {
+            globalThis.codeEditor = ace.edit("code")
+            globalThis.codeEditor.setShowPrintMargin(false)
+
+            const session = globalThis.codeEditor.session
+            session.setUseWorker(false)
+            session.setUseWrapMode(true)
+            session.setMode("ace/mode/javascript")
+            session.setValue("")
+
+            const runButton = document.querySelector('#runButton')
+            const mainDiv = document.querySelector('#mainDiv')
+            const codeElement = mainDiv.querySelector('pre')
+            const outputElement = mainDiv.querySelector('#output')
+
+            const height = window.innerHeight - mainDiv.offsetTop - 2 * runButton.offsetHeight
+
+            if(window.matchMedia('screen and (max-width: 768px)').matches) {
+                mainDiv.setAttribute('style', 'display: flex; flex-direction: column; font-size: 14px')
+                codeElement.setAttribute('style', `font-size: inherit; height: ${parseInt(height / 2)}px`)
+                outputElement.setAttribute('style', `font-size: inherit; height: ${parseInt(height / 2)}px`)
+            } else {
+                mainDiv.setAttribute('style', 'display: flex; font-size: 18px')
+                codeElement.setAttribute('style', `width: 50%; font-size: inherit; height: ${height}px`)
+                outputElement.setAttribute('style', `width: 50%; font-size: inherit; height: ${height}px`)
+
+                const offsetTopDifference = codeElement.offsetTop - outputElement.offsetTop
+                outputElement.style.marginTop = offsetTopDifference + "px"
+            }
+        }
+    </script>
+</head>
+<body>
+    <strong id="headerTitle" style="margin-left: 10vw">AssemblyScript Online</strong>
+    <button id="runButton" onclick="globalThis.runClick()" style="margin-left: 30vw">Run</button>
+    <div id="mainDiv">
+        <textarea id="code"></textarea>
+        <textarea id="output" disabled wrap="off"></textarea>
+    </div>
+</body>
+</html>
