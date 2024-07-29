@@ -1,28 +1,48 @@
 import asc from './assemblyscript/asc.js'
 
-globalThis.print_WasmText = async function() {
-    const { stderr, text, binary } = await asc.compileString(globalThis.codeEditor.getValue(), { optimize: 2 });
-    const err = stderr.toString();
-    if(err != "") {
-        document.querySelector('#output').value = err;
-        return -1;
-    }
+function generateWasm(arg) {
+    document.querySelector('#output').value = ''
 
-    document.querySelector('#output').value = text;
-    return binary;
+    const cmd = 'module.ts --textFile module.wat ' + document.querySelector('[id="promptInput"]').value
+    const stderr = asc.createMemoryStream()
+    const outputs = {}
+    const config = {
+        stderr,
+        readFile: (name) => {
+            switch(name) {
+                case 'asconfig.json': return '{}'
+                case 'module.ts': return globalThis.codeEditor.getValue()
+            }
+        },
+        writeFile: (name, contents) => { outputs[name] = contents },
+        listFiles: () => null,
+    }
+    const options = cmd.split(' ')
+    const wasmBinaryFile = options[options.indexOf('--outFile')+1]
+
+    asc.main(options, config).then(() => {
+        const error = stderr.toString()
+        if(error != '') {
+            document.querySelector('#output').value = error
+            return
+        }
+        document.querySelector('#output').value = outputs['module.wat']
+
+        if(arg == 'binary') {
+            const binary = outputs[wasmBinaryFile]
+            const blob = new Blob([binary], {type: 'application/wasm'})
+            const url = URL.createObjectURL(blob)
+
+            const a = document.createElement('a')
+            document.body.appendChild(a)
+            a.href = url
+            a.download = wasmBinaryFile
+            a.click()
+            URL.revokeObjectURL(url)
+            a.remove()
+        }
+    })
 }
 
-globalThis.download_WasmBinary = async function() {
-    const binary = await globalThis.print_WasmText()
-    if(binary != -1) {
-        const blob = new Blob([binary], {type: 'application/wasm'});
-        const url = window.URL.createObjectURL(blob);
-
-        const a = document.createElement("a");
-        document.body.appendChild(a);
-        a.href = url;
-        a.download = "module.wasm";
-        a.click();
-        window.URL.revokeObjectURL(url);
-    }
-}
+globalThis.WasmText = function() { generateWasm('text') }
+globalThis.WasmBinary = function() { generateWasm('binary') }
