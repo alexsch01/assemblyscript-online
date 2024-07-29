@@ -3,7 +3,7 @@ import asc from './assemblyscript/asc.js'
 function generateWasm(arg) {
     document.querySelector('#output').value = ''
 
-    const cmd = 'module.ts --textFile module.wat ' + document.querySelector('[id="promptInput"]').value
+    const cmd = 'module.ts --textFile module.wat ' + document.querySelector('[id="promptInput"]').value.trim()
     const stderr = asc.createMemoryStream()
     const outputs = {}
     const config = {
