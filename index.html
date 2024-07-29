@@ -30,7 +30,6 @@
             session.setUseWorker(false)
             session.setUseWrapMode(true)
             session.setMode("ace/mode/javascript")
-            session.setValue("")
 
             const promptInput = document.querySelector('#promptInput')
             const mainDiv = document.querySelector('#mainDiv')
@@ -61,7 +60,7 @@
         <strong>AssemblyScript Online</strong><br>
         <button onclick="globalThis.WasmText()">Wasm Text</button>
         <button onclick="globalThis.WasmBinary()">Wasm Binary</button>
-        <input id="promptInput" style="text-align: center; width: 100%">
+        <input id="promptInput" style="text-align: center; width: 100%" autocomplete="off">
     </div>
     <div id="mainDiv">
         <textarea id="code"></textarea>
