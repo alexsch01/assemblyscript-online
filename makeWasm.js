@@ -44,5 +44,5 @@ function generateWasm(arg) {
     })
 }
 
-globalThis.WasmText = function() { generateWasm('text') }
-globalThis.WasmBinary = function() { generateWasm('binary') }
+globalThis.WasmText = () => generateWasm('text')
+globalThis.WasmBinary = () => generateWasm('binary')
