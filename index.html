@@ -32,12 +32,12 @@
             session.setMode("ace/mode/javascript")
             session.setValue("")
 
-            const runButton = document.querySelector('#runButton')
+            const promptInput = document.querySelector('#promptInput')
             const mainDiv = document.querySelector('#mainDiv')
             const codeElement = mainDiv.querySelector('pre')
             const outputElement = mainDiv.querySelector('#output')
 
-            const height = window.innerHeight - mainDiv.offsetTop - 2 * runButton.offsetHeight
+            const height = window.innerHeight - mainDiv.offsetTop - 2 * promptInput.offsetHeight
 
             if(window.matchMedia('screen and (max-width: 768px)').matches) {
                 mainDiv.setAttribute('style', 'display: flex; flex-direction: column; font-size: 14px')
@@ -55,9 +55,12 @@
     </script>
 </head>
 <body>
-    <strong id="headerTitle" style="margin-left: 10vw">AssemblyScript Online</strong>
-    <button id="runButton" onclick="globalThis.print_WasmText()">Wasm Text</button>
-    <button onclick="globalThis.download_WasmBinary()">Wasm Binary</button>
+    <div style="text-align: center">
+        <strong>AssemblyScript Online</strong><br>
+        <button onclick="globalThis.WasmText()">Wasm Text</button>
+        <button onclick="globalThis.WasmBinary()">Wasm Binary</button>
+        <input id="promptInput" style="text-align: center; width: 100%" value="--outFile module.wasm --bindings raw -O3 --runtime stub">
+    </div>
     <div id="mainDiv">
         <textarea id="code"></textarea>
         <textarea id="output" disabled wrap="off"></textarea>
