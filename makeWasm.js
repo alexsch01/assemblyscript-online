@@ -4,10 +4,8 @@ function generateWasm(arg) {
     document.querySelector('#output').value = ''
 
     const cmd = 'module.ts --textFile module.wat ' + document.querySelector('[id="promptInput"]').value.trim()
-    const stderr = asc.createMemoryStream()
     const outputs = {}
     const config = {
-        stderr,
         readFile: (name) => {
             switch(name) {
                 case 'asconfig.json': return '{}'
@@ -20,7 +18,7 @@ function generateWasm(arg) {
     const options = cmd.split(' ')
     const wasmBinaryFile = options[options.indexOf('--outFile')+1]
 
-    asc.main(options, config).then(() => {
+    asc.main(options, config).then(({ stderr }) => {
         const error = stderr.toString()
         if(error != '') {
             document.querySelector('#output').value = error
