@@ -37,6 +37,7 @@
             const outputElement = mainDiv.querySelector('#output')
 
             const height = window.innerHeight - mainDiv.offsetTop - 2 * promptInput.offsetHeight
+            codeElement.querySelector('textarea').autocomplete = 'off'
 
             if(window.matchMedia('screen and (max-width: 768px)').matches) {
                 mainDiv.setAttribute('style', 'display: flex; flex-direction: column; font-size: 14px')
@@ -64,7 +65,7 @@
     </div>
     <div id="mainDiv">
         <textarea id="code"></textarea>
-        <textarea id="output" disabled wrap="off"></textarea>
+        <textarea id="output" disabled wrap="off" autocomplete="off"></textarea>
     </div>
 </body>
 </html>
